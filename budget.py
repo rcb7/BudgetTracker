@@ -1,8 +1,4 @@
 #Goals: Create a budget tracker that allows users to input/remove expenses and view them in a list.
-#       The user should be able to view the total amount of expenses and the total amount of expenses for a specific use.
-#       The user should be able to view the total amount of expenses for a specific day, week, month, or year.
-#       The user should be able to classify the view by uses, i.e personal food vs joint food expenses.
-#       define, add, remove, view, total for the expenses. Should be able to view by day, week, month, year, use (joint/ personal) and category.
 
 import json
 import os
@@ -148,7 +144,6 @@ def main():
             print("3. Exit")
 
             choice = input("Enter choice: ")
-
 
             if choice == "1":
                 amount = float(input("Enter budget amount: "))
