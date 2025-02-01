@@ -58,6 +58,40 @@ class BudgetTracker:
         }
         return totals
     
+    def set_budget(self, amount):
+        self.budget = amount
+        print(f"Budget set to {amount}.")
+
+    def check_budget(self):
+        if self.budget is not None:
+            total = self.total_expenses()
+            print(f"Checking budget...")
+            print(f"Remaining budget: {self.budget - total}")
+            if total > self.budget:
+                print(f"Budget exceeded. Total expenses: {total}, Budget: {self.budget}")
+            else:
+                print(f"Budget not exceeded. Total expenses: {total}, Budget: {self.budget}")
+        else:
+            print("Budget not set")
+
+    def save_budget(self, filename="budget.json"):
+        try:
+            with open(filename, "w") as file:
+                json.dump(self.budget, file)
+            print("Budget saved to file.")
+        except Exception as e:
+            print(f"Failed to save budget to file: {e}")
+    
+    def load_budget(self, filename="budget.json"):
+        try:
+            with open(filename, "r") as file:
+                self.budget = json.load(file)
+            print("Budget loaded from file.")
+        except FileNotFoundError:
+            print("No saved budget found.")
+        except Exception as e:
+            print(f"Failed to load budget from file: {e}")
+    
     def save_expenses(self, filename="expenses.json"):
         try:
             with open(filename, "w") as file:
@@ -83,20 +117,31 @@ def main():
     
     print("Loading saved expenses...")
     tracker.load_expenses()
+    print("Loading saved budget...")
+    tracker.load_budget()
 
     while True:
         print("\nBudget Tracker Menu")
         print("Select an option:")
-        print("1. Add Expense")
-        print("2. Remove Expense")
-        print("3. View Expenses")
-        print("4. View Total Expenses")
-        print("5. View Total Expenses by Use")
-        print("6. Exit")
+        print("1. Set Budget")
+        print("2. Check Budget")
+        print("3. Add Expense")
+        print("4. Remove Expense")
+        print("5. View Expenses")
+        print("6. View Total Expenses")
+        print("7. View Total Expenses by Use")
+        print("8. Exit")
 
         choice = input("Enter choice: ")
 
         if choice == "1":
+            amount = float(input("Enter budget amount: "))
+            tracker.set_budget(amount) 
+
+        elif choice == "2":
+            tracker.check_budget()   
+
+        elif choice == "3":
             date = input("Enter date (YYYY-MM-DD): ")
             description = input("Enter description: ")
             amount = float(input("Enter amount: "))
@@ -106,27 +151,29 @@ def main():
             tracker.add_expense(expense)
             print("Expense succesfully added.")
 
-        elif choice == "2":
+        elif choice == "4":
             tracker.view_expenses()
             index = int(input("Enter expense index number to remove: ")) - 1
             tracker.remove_expense(index)
 
-        elif choice == "3":
+        elif choice == "5":
             tracker.view_expenses()
 
-        elif choice == "4":
+        elif choice == "6":
             total = tracker.total_expenses()
             print(f"Total expenses: {total}")
 
-        elif choice == "5":
+        elif choice == "7":
             totals = tracker.total_expenses_by_uses()
             print(f"Total expenses by use:")
             print(f"{PERSONAL_USE}: {totals[PERSONAL_USE]}")
             print(f"{JOINT_USE}: {totals[JOINT_USE]}")
 
-        elif choice == "6":
+        elif choice == "8":
             print("Saving expenses...")
             tracker.save_expenses()
+            print("Saving budget...")
+            tracker.save_budget()
             print("Exiting Budget Tracker.")
             break
 
