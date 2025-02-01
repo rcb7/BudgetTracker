@@ -2,12 +2,10 @@
 #       The user should be able to view the total amount of expenses and the total amount of expenses for a specific use.
 #       The user should be able to view the total amount of expenses for a specific day, week, month, or year.
 #       The user should be able to classify the view by uses, i.e personal food vs joint food expenses.
-# define, add, remove, view, total for the expenses. Should be able to view by day, week, month, year, use (joint/ personal) and category.
-# Maybe add a budget feature that allows the user to set a budget for a specific use and category.
-# add a main function that allows the user to interact with the budget tracker.
-# find a way to save the expenses to a file so that the user can view them later and not lose them when the program is closed.
+#       define, add, remove, view, total for the expenses. Should be able to view by day, week, month, year, use (joint/ personal) and category.
 
 import json
+import os
 
 #Classes of expense use
 PERSONAL_USE = "Personal"
@@ -132,69 +130,107 @@ def main():
     tracker.load_budget()
 
     while True:
-        print("\nBudget Tracker Menu")
-        print("Select an option:")
-        print("1. Set Budget")
-        print("2. Check Budget")
-        print("3. Add Expense")
-        print("4. Remove Expense")
-        print("5. Edit Expenses")
-        print("6. View Expenses")
-        print("7. View Total Expenses")
-        print("8. View Total Expenses by Use")
-        print("9. Exit")
+        os.system("cls" if os.name == "nt" else "clear")
+        print("\nBudget Tracker")
+        print("Select a menu")
+        print("1. Budget")
+        print("2. Expenses")
+        print("3. Totals")      
+        print("4. Exit")
 
         choice = input("Enter choice: ")
 
         if choice == "1":
-            amount = float(input("Enter budget amount: "))
-            tracker.set_budget(amount) 
+            print("\nBudget Menu")
+            print("Select an option:")
+            print("1. Set budget")
+            print("2. Check budget")
+            print("3. Exit")
 
-        elif choice == "2":
-            tracker.check_budget()   
+            choice = input("Enter choice: ")
 
-        elif choice == "3":
-            date = input("Enter date (YYYY-MM-DD): ")
-            description = input("Enter description: ")
-            amount = float(input("Enter amount: "))
-            use = input(f"Enter use ({PERSONAL_USE}/{JOINT_USE}): ").lower()
-            category = input("Enter category: ")
-            expense = Expense(date, description, amount, use, category)
-            tracker.add_expense(expense)
-            print("Expense succesfully added.")
 
-        elif choice == "4":
-            tracker.view_expenses()
-            index = int(input("Enter expense index number to remove: ")) - 1
-            tracker.remove_expense(index)
+            if choice == "1":
+                amount = float(input("Enter budget amount: "))
+                tracker.set_budget(amount) 
 
-        elif choice == "5":
-            tracker.view_expenses()
-            if len(tracker.expenses) == 0:
+            elif choice == "2":
+                tracker.check_budget()   
+
+            elif choice == "3":
+                print("Exiting Budget Menu.")
                 continue
-            elif len(tracker.expenses) > 0:
-                index = int(input("Enter expense index number to edit: ")) - 1
+        
+        elif choice == "2":
+            print("\nExpenses Menu")
+            print("Select an option:")
+            print("1. Add expense")
+            print("2. Remove expense")
+            print("3. Edit expense")
+            print("4. View expenses")
+            print("5. Exit")
+
+            choice = input("Enter choice: ")
+   
+            if choice == "1":
                 date = input("Enter date (YYYY-MM-DD): ")
                 description = input("Enter description: ")
                 amount = float(input("Enter amount: "))
                 use = input(f"Enter use ({PERSONAL_USE}/{JOINT_USE}): ").lower()
                 category = input("Enter category: ")
-                tracker.edit_expense(index, date, description, amount, use, category)
+                expense = Expense(date, description, amount, use, category)
+                tracker.add_expense(expense)
+                print("Expense succesfully added.")
 
-        elif choice == "6":
-            tracker.view_expenses()
+            elif choice == "2":
+                tracker.view_expenses()
+                index = int(input("Enter expense index number to remove: ")) - 1
+                tracker.remove_expense(index)
 
-        elif choice == "7":
-            total = tracker.total_expenses()
-            print(f"Total expenses: {total}")
+            elif choice == "3":
+                tracker.view_expenses()
+                if len(tracker.expenses) == 0:
+                    continue
+                elif len(tracker.expenses) > 0:
+                    index = int(input("Enter expense index number to edit: ")) - 1
+                    date = input("Enter date (YYYY-MM-DD): ")
+                    description = input("Enter description: ")
+                    amount = float(input("Enter amount: "))
+                    use = input(f"Enter use ({PERSONAL_USE}/{JOINT_USE}): ").lower()
+                    category = input("Enter category: ")
+                    tracker.edit_expense(index, date, description, amount, use, category)
 
-        elif choice == "8":
-            totals = tracker.total_expenses_by_uses()
-            print(f"Total expenses by use:")
-            print(f"{PERSONAL_USE}: {totals[PERSONAL_USE]}")
-            print(f"{JOINT_USE}: {totals[JOINT_USE]}")
+            elif choice == "4":
+                tracker.view_expenses()
 
-        elif choice == "9":
+            elif choice == "5":
+                print("Exiting Expenses Menu.")
+                continue
+        
+        elif choice == "3":
+            print("\nTotals Menu")
+            print("Select an option:")
+            print("1. Total expenses")
+            print("2. Total expenses by use")
+            print("3. Exit")
+
+            choice = input("Enter choice: ")
+
+            if choice == "1":
+                total = tracker.total_expenses()
+                print(f"Total expenses: {total}")
+
+            elif choice == "2":
+                totals = tracker.total_expenses_by_uses()
+                print(f"Total expenses by use:")
+                print(f"{PERSONAL_USE}: {totals[PERSONAL_USE]}")
+                print(f"{JOINT_USE}: {totals[JOINT_USE]}")
+
+            elif choice == "3":
+                print("Exiting Totals Menu.")
+                continue
+
+        elif choice == "4":
             print("Saving expenses...")
             tracker.save_expenses()
             print("Saving budget...")
