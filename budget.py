@@ -42,6 +42,17 @@ class BudgetTracker:
             print("Expenses list:")
             for index, expense in enumerate(self.expenses, start=1):
                 print(f"{index}. Date: {expense.date}, Description: {expense.description}, Amount: {expense.amount}, Use: {expense.use}, Category: {expense.category}")
+
+    def edit_expense(self, index, date, description, amount, use, category):
+        if 0 <= index < len(self.expenses):
+            self.expenses[index].date = date
+            self.expenses[index].description = description
+            self.expenses[index].amount = amount
+            self.expenses[index].use = use
+            self.expenses[index].category = category
+            print("Expense edited.")
+        else:
+            print("Failed to edit expense, invalid expense index.")
            
     def total_expenses(self) -> float:
         total = sum(expense.amount for expense in self.expenses)
@@ -127,10 +138,11 @@ def main():
         print("2. Check Budget")
         print("3. Add Expense")
         print("4. Remove Expense")
-        print("5. View Expenses")
-        print("6. View Total Expenses")
-        print("7. View Total Expenses by Use")
-        print("8. Exit")
+        print("5. Edit Expenses")
+        print("6. View Expenses")
+        print("7. View Total Expenses")
+        print("8. View Total Expenses by Use")
+        print("9. Exit")
 
         choice = input("Enter choice: ")
 
@@ -158,18 +170,31 @@ def main():
 
         elif choice == "5":
             tracker.view_expenses()
+            if len(tracker.expenses) == 0:
+                continue
+            elif len(tracker.expenses) > 0:
+                index = int(input("Enter expense index number to edit: ")) - 1
+                date = input("Enter date (YYYY-MM-DD): ")
+                description = input("Enter description: ")
+                amount = float(input("Enter amount: "))
+                use = input(f"Enter use ({PERSONAL_USE}/{JOINT_USE}): ").lower()
+                category = input("Enter category: ")
+                tracker.edit_expense(index, date, description, amount, use, category)
 
         elif choice == "6":
+            tracker.view_expenses()
+
+        elif choice == "7":
             total = tracker.total_expenses()
             print(f"Total expenses: {total}")
 
-        elif choice == "7":
+        elif choice == "8":
             totals = tracker.total_expenses_by_uses()
             print(f"Total expenses by use:")
             print(f"{PERSONAL_USE}: {totals[PERSONAL_USE]}")
             print(f"{JOINT_USE}: {totals[JOINT_USE]}")
 
-        elif choice == "8":
+        elif choice == "9":
             print("Saving expenses...")
             tracker.save_expenses()
             print("Saving budget...")
