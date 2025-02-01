@@ -7,6 +7,8 @@
 # add a main function that allows the user to interact with the budget tracker.
 # find a way to save the expenses to a file so that the user can view them later and not lose them when the program is closed.
 
+import json
+
 #Classes of expense use
 PERSONAL_USE = "Personal"
 JOINT_USE = "Joint"
@@ -56,6 +58,26 @@ class BudgetTracker:
         }
         return totals
     
+    def save_expenses(self, filename="expenses.json"):
+        try:
+            with open(filename, "w") as file:
+                json.dump([expense.__dict__ for expense in self.expenses], file)
+            print("Expenses saved to file.")
+        except Exception as e:
+            print(f"Failed to save expenses to file: {e}")
+            
+    def load_expenses(self, filename="expenses.json"):
+        try:
+            with open(filename, "r") as file:
+                expenses_data = json.load(file)
+                self.expenses = [Expense(expense["date"], expense["description"], expense["amount"], expense["use"], expense["category"]) for expense in expenses_data]
+            print("Expenses loaded from file.")
+        except FileNotFoundError:
+            print("No saved expenses found.")
+        except Exception as e:
+            print(f"Failed to load expenses from file: {e}")
+        
+
 def main():
     tracker = BudgetTracker()
 
@@ -66,7 +88,9 @@ def main():
         print("3. View Expenses")
         print("4. View Total Expenses")
         print("5. View Total Expenses by Use")
-        print("6. Exit")
+        print("6. Load Expenses")
+        print("7. Save Expenses")
+        print("8. Exit")
 
         choice = input("Enter choice: ")
 
@@ -97,8 +121,16 @@ def main():
             print(f"Total expenses by use:")
             print(f"{PERSONAL_USE}: {totals[PERSONAL_USE]}")
             print(f"{JOINT_USE}: {totals[JOINT_USE]}")
-
+            
         elif choice == "6":
+            print("Loading expenses...")
+            tracker.load_expenses()
+        
+        elif choice == "7":
+            print("Saving expenses...")
+            tracker.save_expenses()
+
+        elif choice == "8":
             print("Exiting Budget Tracker.")
             break
 
@@ -107,7 +139,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-            
-
-
