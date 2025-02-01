@@ -7,6 +7,7 @@
 # add a main function that allows the user to interact with the budget tracker.
 # find a way to save the expenses to a file so that the user can view them later and not lose them when the program is closed.
 
+#Classes of expense use
 PERSONAL_USE = "Personal"
 JOINT_USE = "Joint"
 
