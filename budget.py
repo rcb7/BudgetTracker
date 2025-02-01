@@ -80,17 +80,19 @@ class BudgetTracker:
 
 def main():
     tracker = BudgetTracker()
+    
+    print("Loading saved expenses...")
+    tracker.load_expenses()
 
     while True:
-        print("\nBudget Tracker Menu:")
+        print("\nBudget Tracker Menu")
+        print("Select an option:")
         print("1. Add Expense")
         print("2. Remove Expense")
         print("3. View Expenses")
         print("4. View Total Expenses")
         print("5. View Total Expenses by Use")
-        print("6. Load Expenses")
-        print("7. Save Expenses")
-        print("8. Exit")
+        print("6. Exit")
 
         choice = input("Enter choice: ")
 
@@ -121,16 +123,10 @@ def main():
             print(f"Total expenses by use:")
             print(f"{PERSONAL_USE}: {totals[PERSONAL_USE]}")
             print(f"{JOINT_USE}: {totals[JOINT_USE]}")
-            
+
         elif choice == "6":
-            print("Loading expenses...")
-            tracker.load_expenses()
-        
-        elif choice == "7":
             print("Saving expenses...")
             tracker.save_expenses()
-
-        elif choice == "8":
             print("Exiting Budget Tracker.")
             break
 
