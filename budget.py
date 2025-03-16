@@ -2,8 +2,14 @@
 
 import json
 import os
+try:
+    import pandas as pd
+    print("Pandas library loaded.")
+except ImportError:
+    print("Pandas library not found. Please install pandas library.")
+    exit()
+from statsmodels.tsa.arima.model import ARIMA
 
-#Classes of expense use
 PERSONAL_USE = "Personal"
 JOINT_USE = "Joint"
 
@@ -115,6 +121,16 @@ class BudgetTracker:
             print("No saved expenses found.")
         except Exception as e:
             print(f"Failed to load expenses from file: {e}")
+            
+    def forcast_expenses(self):
+        df = pd.DataFrame([expense.__dict__ for expense in self.expenses])
+        df["date"] = pd.to_datetime(df["date"])
+        df.set_index("date", inplace=True)
+        monthly_expenses = df.resample("M").sum()['amount']
+        model = ARIMA(monthly_expenses, order=(1,1,1))
+        model_fit = model.fit()
+        forecast = model_fit.forecast(steps=1)
+        print(f"Forecasted expenses for the next month: {forecast[0]}")
         
 
 def main():
@@ -163,7 +179,8 @@ def main():
             print("2. Remove expense")
             print("3. Edit expense")
             print("4. View expenses")
-            print("5. Exit")
+            print("5. Expenses forecast")
+            print("6. Exit")
 
             choice = input("Enter choice: ")
    
@@ -197,8 +214,11 @@ def main():
 
             elif choice == "4":
                 tracker.view_expenses()
-
+                
             elif choice == "5":
+                tracker.forcast_expenses()
+
+            elif choice == "6":
                 print("Exiting Expenses Menu.")
                 continue
         
