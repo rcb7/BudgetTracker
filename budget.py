@@ -8,7 +8,6 @@ try:
 except ImportError:
     print("Pandas library not found. Please install pandas library.")
     exit()
-from statsmodels.tsa.arima.model import ARIMA
 
 PERSONAL_USE = "Personal"
 JOINT_USE = "Joint"
