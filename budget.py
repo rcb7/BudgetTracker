@@ -18,7 +18,7 @@ class Expense:
 class BudgetTracker:
     def __init__(self):
         self.expenses = []
-    
+
     def add_expense(self, expense):
         self.expenses.append(expense)
 
@@ -109,7 +109,11 @@ class BudgetTracker:
         try:
             with open(filename, "r") as file:
                 expenses_data = json.load(file)
-                self.expenses = [Expense(expense["date"], expense["description"], expense["amount"], expense["use"], expense["category"]) for expense in expenses_data]
+                self.expenses = [Expense(expense["date"], 
+                                         expense["description"], 
+                                         expense["amount"], 
+                                         expense["use"], 
+                                         expense["category"]) for expense in expenses_data]
             print("Expenses loaded from file.")
         except FileNotFoundError:
             print("No saved expenses found.")
@@ -150,7 +154,8 @@ def main():
                 tracker.set_budget(amount) 
 
             elif choice == "2":
-                tracker.check_budget()   
+                tracker.check_budget()
+                input("Press Enter to continue...")
 
             elif choice == "3":
                 print("Exiting Budget Menu.")
@@ -175,12 +180,14 @@ def main():
                 category = input("Enter category: ")
                 expense = Expense(date, description, amount, use, category)
                 tracker.add_expense(expense)
-                print("Expense succesfully added.")
+                print("Expense successfully added.")
+                input("Press Enter to continue...")
 
             elif choice == "2":
                 tracker.view_expenses()
                 index = int(input("Enter expense index number to remove: ")) - 1
                 tracker.remove_expense(index)
+                input("Press Enter to continue...")
 
             elif choice == "3":
                 tracker.view_expenses()
@@ -194,9 +201,11 @@ def main():
                     use = input(f"Enter use ({PERSONAL_USE}/{JOINT_USE}): ").lower()
                     category = input("Enter category: ")
                     tracker.edit_expense(index, date, description, amount, use, category)
+                    input("Press Enter to continue...")
 
             elif choice == "4":
                 tracker.view_expenses()
+                input("Press Enter to continue...")
 
             elif choice == "5":
                 print("Exiting Expenses Menu.")
@@ -214,12 +223,14 @@ def main():
             if choice == "1":
                 total = tracker.total_expenses()
                 print(f"Total expenses: {total}")
+                input("Press Enter to continue...")
 
             elif choice == "2":
                 totals = tracker.total_expenses_by_uses()
                 print(f"Total expenses by use:")
                 print(f"{PERSONAL_USE}: {totals[PERSONAL_USE]}")
                 print(f"{JOINT_USE}: {totals[JOINT_USE]}")
+                input("Press Enter to continue...")
 
             elif choice == "3":
                 print("Exiting Totals Menu.")
