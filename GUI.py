@@ -1,8 +1,6 @@
-import sys
 import tkinter as tk
 from tkinter import ttk, messagebox
 
-sys.path.insert(0, r"e:\Python\BudgetTracker")
 from budget import BudgetTracker, Expense, PERSONAL_USE, JOINT_USE
 
 # --- Colours & fonts ---
