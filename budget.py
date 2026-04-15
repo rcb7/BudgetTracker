@@ -8,6 +8,7 @@ try:
 except ImportError:
     print("Pandas library not found. Please install pandas library.")
     exit()
+    
 
 PERSONAL_USE = "Personal"
 JOINT_USE = "Joint"
@@ -124,17 +125,6 @@ class BudgetTracker:
             print("No saved expenses found.")
         except Exception as e:
             print(f"Failed to load expenses from file: {e}")
-            
-    def forcast_expenses(self):
-        df = pd.DataFrame([expense.__dict__ for expense in self.expenses])
-        df["date"] = pd.to_datetime(df["date"])
-        df.set_index("date", inplace=True)
-        monthly_expenses = df.resample("M").sum()['amount']
-        model = ARIMA(monthly_expenses, order=(1,1,1))
-        model_fit = model.fit()
-        forecast = model_fit.forecast(steps=1)
-        print(f"Forecasted expenses for the next month: {forecast[0]}")
-        
 
 def main():
     tracker = BudgetTracker()
